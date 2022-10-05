@@ -1,0 +1,98 @@
+\documentclass[letterpaper]{oup-contemporary}
+% Packages divers
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage[french]{babel}
+\usepackage{bbm}
+\usepackage{amsmath,amssymb}
+% Les packages necessaires pour faire le pseudo code
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\renewcommand{\algorithmicrequire}{\textbf{Entrée(s) :}}
+\renewcommand{\algorithmicreturn}{\textbf{retourner}}
+\renewcommand{\algorithmicensure}{\textbf{Initialisation ;}}
+\renewcommand{\algorithmicwhile}{\textbf{Tant que}}
+\renewcommand{\algorithmicdo}{\textbf{Initialisation}}
+\renewcommand{\algorithmicendwhile}{\textbf{fin du Tant que ;}}
+\renewcommand{\algorithmicend}{\textbf{fin}}
+\renewcommand{\algorithmicif}{\textbf{si}}
+\renewcommand{\algorithmicendif}{\textbf{fin du si}}
+\renewcommand{\algorithmicelse}{\textbf{sinon}}
+\renewcommand{\algorithmicelsif}{\textbf{fin du sinon}}
+\renewcommand{\algorithmicthen}{\textbf{alors}}
+\renewcommand{\algorithmicthen}{\textbf{Étape E}}
+\renewcommand{\algorithmicthen}{\textbf{Étape M}}
+\renewcommand{\algorithmicfor}{\textbf{pour}}
+\renewcommand{\algorithmicforall}{\textbf{pour tout}}
+\renewcommand{\algorithmicto}{\textbf{à}}
+\renewcommand{\algorithmicendfor}{\textbf{fin du pour}}
+\renewcommand{\algorithmicdo}{\textbf{faire}}
+\renewcommand{\algorithmicloop}{\textbf{boucler}}
+\renewcommand{\algorithmicendloop}{\textbf{fin de la boucle}}
+\renewcommand{\algorithmicrepeat}{\textbf{répéter}}
+\renewcommand{\algorithmicuntil}{\textbf{jusqu’à}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\hoffset}{-18pt}        
+\setlength{\oddsidemargin}{0pt} % Marge gauche sur pages impaires
+\setlength{\evensidemargin}{9pt} % Marge gauche sur pages paires
+\setlength{\marginparwidth}{54pt} % Largeur de note dans la marge
+\setlength{\textwidth}{481pt} % Largeur de la zone de texte (17cm)
+\setlength{\voffset}{-18pt} % Bon pour DOS
+\setlength{\marginparsep}{7pt} % Séparation de la marge
+\setlength{\topmargin}{0pt} % Pas de marge en haut
+\setlength{\headheight}{13pt} % Haut de page
+\setlength{\headsep}{10pt} % Entre le haut de page et le texte
+\setlength{\footskip}{27pt} % Bas de page + séparation
+\setlength{\textheight}{708pt} % Hauteur de la zone de texte (25cm)
+
+\title{Generative Adversial Network}
+\author[1]{Balsan Thibault, Carvaillo Thomas, L'archevêque Valentin}
+\papercat{Projet d'Apprentissage Statistique}
+
+\newtheorem{prop}{Proposition}
+
+\begin{document}
+
+\begin{frontmatter}
+\maketitle
+\begin{abstract}
+Intro ici
+\end{abstract}
+\end{frontmatter}
+
+
+
+\section{Partie ? - Modélisation mathématique}
+Dans cette partie, nous allons apporter les divers éléments mathématiques de la méthode; en modélisant les perceptrons multicouches comme des distributions de probabilité, et en explicitant une méthode de construction optimale des perceptrons.\newline
+
+Le perceptron multicouche générateur $G$ (resp. le discriminateur $D$) sera ici modélisé par une fonction différentiable $G_{\theta_g}(z)$ (resp. $D_{\theta_d}(x)$); où $z \text{\textasciitilde} p(z)$ est le bruit donné en entrée du générateur et $x = G_{\theta_g}(z)$.
+Nous dénoterons par $p_{data}$ la distribution de probabilité de l'échantillon originel, et $p_g$ la distribution de probabilité de l'échantillon généré par $G$. 
+Le but de ce GAN étant ainsi la convergence de $p_{data}$ vers $p_g$.
+Ici, $D_{\theta_d}(x)$ ne retournera pas une valeur binaire, mais un scalaire compris entre $0$ et $1$, représentant la probabilité que $x$ soit ($D_{\theta_d}(x)=1$) ou non ($D_{\theta_d}(x)=0$) généré par le générateur. \newline
+Avant de présenter la formalisation du problème, nous allons évoquer un cas élémentaire, en émettant l'hypothèse forte que la distribution $p_{data}$ est connue.
+\begin{prop}[Optimalité de $D$]
+    Soit $G_{\theta_g}$ un générateur \underline{fixe}, alors le discriminateur optimal $D^*_{\theta_d}(x)$ est définit par
+    \begin{center}
+        $D^*_{\theta_d}(x) = \frac{p_{data(x)}}{p_{data(x)} + p_g(x)}$ 
+    \end{center}
+\end{prop}
+Une démonstration est présentée en annexe.\newline
+Comme nous l'avons vu, il s'agit de maximiser la probabilité que $D$ ait raison, \underline{i.e.} maximiser $D_{\theta_d}(x)$, et, dans un même temps, que $G$ trompe $D$, \underline{i.e.} de minimiser $D_{\theta_d}(G_{\theta_g})$.
+Ceci peut se réécrire sous le problème d'optimisation suivant :
+\begin{center}
+    $\underset{G_{\theta_g}}{min}\left(\underset{D_{\theta_d}}{max}\left(\mathbbm{E}_{x \text{\textasciitilde} p_{data}}\left[log\left(D_{\theta_d}(x)\right)\right] + \mathbbm{E}_{z \text{\textasciitilde} p_z}\left[log\left(1 - D_{\theta_d}(G_{\theta_g}(z))\right)\right]\right)\right)$
+\end{center}
+
+Ce problème ce résout de manière computationnelle, à l'aide d'une descente de gradient pour le problème de minimisation et d'une ascension de gradient pour celui de maximisation. 
+
+\begin{algorithm}
+	\caption{\textbf{text}}
+	\begin{algorithmic}[1]
+	    \STATE {$\text{}$}
+	\end{algorithmic}
+\end{algorithm}
+
+%\bibliography{paper-refs}
+\end{document}
