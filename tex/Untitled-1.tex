@@ -5,6 +5,7 @@
 \usepackage[french]{babel}
 \usepackage{bbm}
 \usepackage{amsmath,amssymb}
+\usepackage{stmaryrd}
 % Les packages necessaires pour faire le pseudo code
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{algorithm}
@@ -15,24 +16,26 @@
 \renewcommand{\algorithmicensure}{\textbf{Initialisation ;}}
 \renewcommand{\algorithmicwhile}{\textbf{Tant que}}
 \renewcommand{\algorithmicdo}{\textbf{Initialisation}}
-\renewcommand{\algorithmicendwhile}{\textbf{fin du Tant que ;}}
-\renewcommand{\algorithmicend}{\textbf{fin}}
-\renewcommand{\algorithmicif}{\textbf{si}}
-\renewcommand{\algorithmicendif}{\textbf{fin du si}}
-\renewcommand{\algorithmicelse}{\textbf{sinon}}
-\renewcommand{\algorithmicelsif}{\textbf{fin du sinon}}
-\renewcommand{\algorithmicthen}{\textbf{alors}}
-\renewcommand{\algorithmicthen}{\textbf{Étape E}}
-\renewcommand{\algorithmicthen}{\textbf{Étape M}}
-\renewcommand{\algorithmicfor}{\textbf{pour}}
-\renewcommand{\algorithmicforall}{\textbf{pour tout}}
+\renewcommand{\algorithmicendwhile}{\textbf{Fin du Tant que ;}}
+\renewcommand{\algorithmicend}{\textbf{Fin}}
+\renewcommand{\algorithmicif}{\textbf{Si}}
+\renewcommand{\algorithmicendif}{\textbf{Fin du si}}
+\renewcommand{\algorithmicelse}{\textbf{Sinon}}
+\renewcommand{\algorithmicelsif}{\textbf{Fin du sinon}}
+\renewcommand{\algorithmicthen}{\textbf{Alors}}
+\renewcommand{\algorithmicforall}{\textbf{Pour tout}}
 \renewcommand{\algorithmicto}{\textbf{à}}
-\renewcommand{\algorithmicendfor}{\textbf{fin du pour}}
+\renewcommand{\algorithmicendfor}{\textbf{Fin du pour}}
 \renewcommand{\algorithmicdo}{\textbf{faire}}
 \renewcommand{\algorithmicloop}{\textbf{boucler}}
-\renewcommand{\algorithmicendloop}{\textbf{fin de la boucle}}
-\renewcommand{\algorithmicrepeat}{\textbf{répéter}}
-\renewcommand{\algorithmicuntil}{\textbf{jusqu’à}}
+\renewcommand{\algorithmicendloop}{\textbf{Fin de la boucle}}
+\renewcommand{\algorithmicrepeat}{\textbf{Répéter}}
+\renewcommand{\algorithmicuntil}{\textbf{Jusqu’à}}
+\renewcommand{\algorithmicfor}{\textbf{Pour}}
+
+\newcommand{\fonction}[5]{\begin{array}{l|rcl}
+    #1: & #2 & \rightarrow & #3 \\
+        & #4 & \mapsto & #5 \end{array}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \setlength{\hoffset}{-18pt}        
 \setlength{\oddsidemargin}{0pt} % Marge gauche sur pages impaires
@@ -67,10 +70,22 @@ Intro ici
 \section{Partie ? - Modélisation mathématique}
 Dans cette partie, nous allons apporter les divers éléments mathématiques de la méthode; en modélisant les perceptrons multicouches comme des distributions de probabilité, et en explicitant une méthode de construction optimale des perceptrons.\newline
 
-Le perceptron multicouche générateur $G$ (resp. le discriminateur $D$) sera ici modélisé par une fonction différentiable $G_{\theta_g}(z)$ (resp. $D_{\theta_d}(x)$); où $z \text{\textasciitilde} p(z)$ est le bruit donné en entrée du générateur et $x = G_{\theta_g}(z)$.
+Le perceptron multicouche générateur $G$ sera ici modélisé par la fonction différentiable  
+
+\begin{center}
+    $\fonction{G_{\theta_g}}{\mathbbm{R^n}}{E}{z}{x = G_{\theta_g}(z)}$
+\end{center}
+
+où $z \text{\textasciitilde} p(z)$ est le bruit donné en entrée du générateur et $E$ l'espace de l'échantillon d'apprentissage.\newline
+Le discriminateur $D_{\theta_d}(x)$ sera représenté par la fonction toute aussi différentiable
+
+\begin{center}
+    $\fonction{D_{\theta_D}}{E}{\llbracket O,1 \rrbracket}{x}{\mathbbm{P}\left(x = G_{\theta_g}(z)\right)}$
+\end{center}
+
 Nous dénoterons par $p_{data}$ la distribution de probabilité de l'échantillon originel, et $p_g$ la distribution de probabilité de l'échantillon généré par $G$. 
 Le but de ce GAN étant ainsi la convergence de $p_{data}$ vers $p_g$.
-Ici, $D_{\theta_d}(x)$ ne retournera pas une valeur binaire, mais un scalaire compris entre $0$ et $1$, représentant la probabilité que $x$ soit ($D_{\theta_d}(x)=1$) ou non ($D_{\theta_d}(x)=0$) généré par le générateur. \newline
+Ici, $D_{\theta_d}(x)$ ne retournera pas une valeur binaire, mais un scalaire compris entre $0$ et $1$, représentant la probabilité que $x$ soit ($D_{\theta_d}(x)=0$) ou non ($D_{\theta_d}(x)=1$) généré par le générateur. \newline
 Avant de présenter la formalisation du problème, nous allons évoquer un cas élémentaire, en émettant l'hypothèse forte que la distribution $p_{data}$ est connue.
 \begin{prop}[Optimalité de $D$]
     Soit $G_{\theta_g}$ un générateur \underline{fixe}, alors le discriminateur optimal $D^*_{\theta_d}(x)$ est définit par
@@ -79,7 +94,7 @@ Avant de présenter la formalisation du problème, nous allons évoquer un cas �
     \end{center}
 \end{prop}
 Une démonstration est présentée en annexe.\newline
-Comme nous l'avons vu, il s'agit de maximiser la probabilité que $D$ ait raison, \underline{i.e.} maximiser $D_{\theta_d}(x)$, et, dans un même temps, que $G$ trompe $D$, \underline{i.e.} de minimiser $D_{\theta_d}(G_{\theta_g})$.
+Comme nous l'avons vu, il s'agit de maximiser la probabilité que $D$ ait raison, \underline{i.e.} maximiser $D_{\theta_d}(x)$, et, dans un même temps, que $G$ trompe $D$, \underline{i.e.} de minimiser $D_{\theta_d}(G_{\theta_g}(z))$.
 Ceci peut se réécrire sous le problème d'optimisation suivant :
 \begin{center}
     $\underset{G_{\theta_g}}{min}\left(\underset{D_{\theta_d}}{max}\left(\mathbbm{E}_{x \text{\textasciitilde} p_{data}}\left[log\left(D_{\theta_d}(x)\right)\right] + \mathbbm{E}_{z \text{\textasciitilde} p_z}\left[log\left(1 - D_{\theta_d}(G_{\theta_g}(z))\right)\right]\right)\right)$
@@ -88,9 +103,25 @@ Ceci peut se réécrire sous le problème d'optimisation suivant :
 Ce problème ce résout de manière computationnelle, à l'aide d'une descente de gradient pour le problème de minimisation et d'une ascension de gradient pour celui de maximisation. 
 
 \begin{algorithm}
-	\caption{\textbf{text}}
+	\caption{\textbf{ - Goodfellow et al.}}
 	\begin{algorithmic}[1]
-	    \STATE {$\text{}$}
+        \REQUIRE{$T \in \mathbbm{N}$ le nombre d'itérations pour l'apprentissage, $K$ un hyperparamètre }
+        \FOR{$t\in \{1,...,T\}$}
+            \FOR{$k \in \{1,...,K\}$}
+                \STATE{Générer aléatoirement un échantillon de bruit $z^{(1)}, ..., z^{(m)}$}
+                \STATE{Extraire aléatoirement un échantillon $x^{(1)}, ..., x^{(m)}$ de l'échantillon originel}
+                \STATE{Mettre à jour le discriminateur par ascension de gradient :
+                    \begin{center}
+                        $\Delta_{\theta_d}\displaystyle\frac{1}{m}\sum_{i = 1}^m \left( log\left[D_{\theta_d}(x^{(i)})\right] + log\left[1 - D_{\theta_d}(G_{\theta_g}(z^{(i)}))\right] \right)$
+                    \end{center}
+                } 
+            \ENDFOR
+            \STATE{Générer aléatoirement un échantillon de bruit $z^{(1)}, ..., z^{(m)}$}
+            \STATE{Mettre à jour le discriminateur par ascension de gradient :
+                \begin{center}
+                    $\Delta_{\theta_g}\displaystyle\frac{1}{m}\sum_{i = 1}^m \left(log\left[1 - D_{\theta_d}(G_{\theta_g}(z^{(i)}))\right] \right)$
+                \end{center}}
+        \ENDFOR
 	\end{algorithmic}
 \end{algorithm}
 
