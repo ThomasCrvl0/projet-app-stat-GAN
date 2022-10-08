@@ -1,4 +1,5 @@
 \documentclass[letterpaper]{oup-contemporary}
+
 % Packages divers
 \usepackage{graphicx}
 \usepackage{siunitx}
@@ -6,11 +7,10 @@
 \usepackage{bbm}
 \usepackage{amsmath,amssymb}
 \usepackage{stmaryrd}
-% Les packages necessaires pour faire le pseudo code
-%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{algorithm}
 \usepackage{algorithmic}
 
+% Redéfinition des commandes
 \renewcommand{\algorithmicrequire}{\textbf{Entrée(s) :}}
 \renewcommand{\algorithmicreturn}{\textbf{retourner}}
 \renewcommand{\algorithmicensure}{\textbf{Initialisation ;}}
@@ -32,10 +32,10 @@
 \renewcommand{\algorithmicrepeat}{\textbf{Répéter}}
 \renewcommand{\algorithmicuntil}{\textbf{Jusqu’à}}
 \renewcommand{\algorithmicfor}{\textbf{Pour}}
-
 \newcommand{\fonction}[5]{\begin{array}{l|rcl}
     #1: & #2 & \rightarrow & #3 \\
         & #4 & \mapsto & #5 \end{array}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \setlength{\hoffset}{-18pt}        
 \setlength{\oddsidemargin}{0pt} % Marge gauche sur pages impaires
@@ -56,6 +56,7 @@
 
 \newtheorem{prop}{Proposition}
 
+%%%% Le document débute ici %%%%
 \begin{document}
 
 \begin{frontmatter}
@@ -67,6 +68,7 @@ Intro ici
 
 
 
+%%%% PARTIE MATHS %%%%
 \section{Partie ? - Modélisation mathématique}
 Dans cette partie, nous allons apporter les divers éléments mathématiques de la méthode; en modélisant les perceptrons multicouches comme des distributions de probabilité, et en explicitant une méthode de construction optimale des perceptrons.\newline
 
@@ -112,18 +114,20 @@ Ce problème ce résout de manière computationnelle, à l'aide d'une descente d
                 \STATE{Extraire aléatoirement un échantillon $x^{(1)}, ..., x^{(m)}$ de l'échantillon originel}
                 \STATE{Mettre à jour le discriminateur par ascension de gradient :
                     \begin{center}
-                        $\Delta_{\theta_d}\displaystyle\frac{1}{m}\sum_{i = 1}^m \left( log\left[D_{\theta_d}(x^{(i)})\right] + log\left[1 - D_{\theta_d}(G_{\theta_g}(z^{(i)}))\right] \right)$
+                        $\theta_d = \theta_d + \nabla_{\theta_d}\displaystyle\frac{1}{m}\sum_{i = 1}^m \left( log\left[D_{\theta_d}(x^{(i)})\right] + log\left[1 - D_{\theta_d}(G_{\theta_g}(z^{(i)}))\right] \right)$
                     \end{center}
                 } 
             \ENDFOR
             \STATE{Générer aléatoirement un échantillon de bruit $z^{(1)}, ..., z^{(m)}$}
-            \STATE{Mettre à jour le discriminateur par ascension de gradient :
+            \STATE{Mettre à jour le générateur par descente de gradient :
                 \begin{center}
-                    $\Delta_{\theta_g}\displaystyle\frac{1}{m}\sum_{i = 1}^m \left(log\left[1 - D_{\theta_d}(G_{\theta_g}(z^{(i)}))\right] \right)$
+                    $\theta_g = \theta_g - \nabla_{\theta_g}\displaystyle\frac{1}{m}\sum_{i = 1}^m \left(log\left[1 - D_{\theta_d}(G_{\theta_g}(z^{(i)}))\right] \right)$
                 \end{center}}
         \ENDFOR
 	\end{algorithmic}
 \end{algorithm}
+%%%% FIN PARTIE MATHS %%%%
+
 
 %\bibliography{paper-refs}
 \end{document}
